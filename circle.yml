@@ -5,5 +5,5 @@ machine:
 dependencies:
   pre:
     - sudo apt-get update
-    - sudo apt-get install python-tk tk python-tk-dbg tk-dev
+    - sudo apt-get install python-tk tk python-tk-dbg tk-dev tcl python2.7-gdbm-dbg python2.7-tk-dbg tix python-gdbm-db
     - pip install -r requirements.txt
