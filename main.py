@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# coding=utf-8
 
 import sys, re, pdb, os
 import logging
@@ -63,16 +64,39 @@ if __name__ == "__main__":
 
 
 def h1a():
+    """
+    Hakija ja viranomainen voivat keskustella lupahakemuksesta lisäämällä kommentteja (add-comment).
+    Kuinka monta kommenttia on kullakin hakemuksella?
+    """
     print(udf.loc[udf['action'] == 'add-comment'].groupby('applicationId').count())
 
 
+def m1a():
+    """
+    Kuinka moni kunta käyttää Lupapiste-palvelua käytönaikaisen datan pohjalta laskettuna?
+    """
+    print(udf.municipalityId.nunique())
+
+
 def a1b():
-    odf["month"] = odf["createdDate"].dt.month
+    """
+    Kausivaihtelu vuositasolla:
+    Mihin aikaan vuodesta hakemuksia luodaan?
+    Ehkä enemmän keväällä?
+    Piirrä kuvaaaja. (Python plot)
+    Vinkki: luo operatiivisen datan createdDaten pohjalta uusi muuttuja createdMonth ja piirrä pylväskaavio siten,
+    että vaaka-akselilla on kuukaudet 1-12 ja pystyakselilla hakemusten lukumäärä.
+    """
+    odf["createdMonth"] = odf["createdDate"].dt.month
     counts = []
     months = []
     for month in range(1, 12):
-        size = odf[odf["month"] == month].size
+        size = odf[odf["createdMonth"] == month].size
         counts.append(size)
         months.append(month)
     plt.bar(months, counts, 1, color="r")
+    plt.xlabel("Months")
+    plt.ylabel("Applications (pcs)")
     plt.show()
+
+
