@@ -1,6 +1,6 @@
 machine:
   python:
-    version: anaconda-4.2.0
+    version: 2.7.10
 
 dependencies:
   pre:
