@@ -1,6 +1,10 @@
 machine:
+  python:
+    version: 2.7.10
   services:
     - docker
 dependencies:
   override:
     - docker pull continuumio/anaconda
+  pre:
+    - pip install -r requirements.txt
