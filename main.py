@@ -64,3 +64,15 @@ if __name__ == "__main__":
 
 def h1a():
     print(udf.loc[udf['action'] == 'add-comment'].groupby('applicationId').count())
+
+
+def a1b():
+    odf["month"] = odf["createdDate"].dt.month
+    counts = []
+    months = []
+    for month in range(1, 12):
+        size = odf[odf["month"] == month].size
+        counts.append(size)
+        months.append(month)
+    plt.bar(months, counts, 1, color="r")
+    plt.show()
