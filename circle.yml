@@ -1,10 +1,6 @@
 machine:
- services:
+  services:
     - docker
-  python:
-    version: 2.7.10
-
 dependencies:
   override:
     - docker pull continuumio/anaconda
-  pre:
