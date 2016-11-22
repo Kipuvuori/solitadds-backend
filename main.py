@@ -131,3 +131,39 @@ def a1b():
     plt.xlabel("Months")
     plt.ylabel("Applications (pcs)")
     plt.show()
+
+
+def u1a():
+    """
+    Kuinka monta käyttäjää Lupapisteessä on?
+    """
+    udf_a = udf[udf["role"] == "applicant"]
+    years = udf_a["datetime"].dt.year.unique()
+    years.sort()
+    labels = []
+    y = []
+    counts = []
+    max_size = 0
+    min_size = sys.maxint
+    for year in years:
+        months = udf_a[udf_a["datetime"].dt.year == year]["datetime"].dt.month.unique()
+        months.sort()
+        for month in months:
+            total_months = year * 12 + month
+            size = udf_a[
+                udf_a["datetime"].dt.year * 12 + udf_a["datetime"].dt.month <= total_months
+            ]["userId"].unique().size
+            counts.append(size)
+            labels.append(str(year)+"/"+str(month))
+            y.append(total_months)
+            if size > max_size:
+                max_size = size
+            if size < min_size:
+                min_size = size
+    plt.plot(y, counts)
+    plt.xticks(y, labels)
+    axes = plt.gca()
+    axes.set_ylim([min_size, max_size+5])
+    plt.xlabel("Months")
+    plt.ylabel("Users (pcs)")
+    plt.show()
