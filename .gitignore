@@ -6,3 +6,4 @@ utils.pyc
 analyze/__init__.pyc
 analyze/applications.pyc
 analyze/users.pyc
+.idea
