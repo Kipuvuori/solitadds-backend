@@ -1,10 +1,10 @@
 machine:
+ services:
+    - docker
   python:
     version: 2.7.10
 
 dependencies:
+  override:
+    - docker pull continuumio/anaconda
   pre:
-    - wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh
-    - bash Anaconda2-4.2.0-Linux-x86_64.sh -b -p $HOME/anaconda
-    - export PATH="$HOME/anaconda/bin:$PATH"
-    - pip install -r requirements.txt
