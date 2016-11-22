@@ -111,28 +111,6 @@ def m2a():
     print(odf.municipalityId.nunique())
 
 
-def a1b():
-    """
-    Kausivaihtelu vuositasolla:
-    Mihin aikaan vuodesta hakemuksia luodaan?
-    Ehkä enemmän keväällä?
-    Piirrä kuvaaaja. (Python plot)
-    Vinkki: luo operatiivisen datan createdDaten pohjalta uusi muuttuja createdMonth ja piirrä pylväskaavio siten,
-    että vaaka-akselilla on kuukaudet 1-12 ja pystyakselilla hakemusten lukumäärä.
-    """
-    odf["createdMonth"] = odf["createdDate"].dt.month
-    counts = []
-    months = []
-    for month in range(1, 12):
-        size = odf[odf["createdMonth"] == month].size
-        counts.append(size)
-        months.append(month)
-    plt.bar(months, counts, 1, color="r")
-    plt.xlabel("Months")
-    plt.ylabel("Applications (pcs)")
-    plt.show()
-
-
 def u1a():
     """
     Kuinka monta käyttäjää Lupapisteessä on?
@@ -191,3 +169,31 @@ def u1b():
     print("There where "+str(pro_users)+" pro users.")
     print("There where "+str(one_time_users)+" one time users.")
 
+
+def a1a():
+    """
+    Kuinka monta hakemusta Lupapisteessä on haettu?
+    """
+    print(odf.applicationId.nunique())
+
+
+def a1b():
+    """
+    Kausivaihtelu vuositasolla:
+    Mihin aikaan vuodesta hakemuksia luodaan?
+    Ehkä enemmän keväällä?
+    Piirrä kuvaaaja. (Python plot)
+    Vinkki: luo operatiivisen datan createdDaten pohjalta uusi muuttuja createdMonth ja piirrä pylväskaavio siten,
+    että vaaka-akselilla on kuukaudet 1-12 ja pystyakselilla hakemusten lukumäärä.
+    """
+    odf["createdMonth"] = odf["createdDate"].dt.month
+    counts = []
+    months = []
+    for month in range(1, 12):
+        size = odf[odf["createdMonth"] == month].size
+        counts.append(size)
+        months.append(month)
+    plt.bar(months, counts, 1, color="r")
+    plt.xlabel("Months")
+    plt.ylabel("Applications (pcs)")
+    plt.show()
