@@ -104,6 +104,13 @@ def m1c():
     plt.show()
 
 
+def m2a():
+    """
+    Kuinka moni kunta käyttää Lupapiste-palvelua operatiivisen datan pohjalta laskettuna?
+    """
+    print(odf.municipalityId.nunique())
+
+
 def a1b():
     """
     Kausivaihtelu vuositasolla:
