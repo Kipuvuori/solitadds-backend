@@ -167,3 +167,27 @@ def u1a():
     plt.xlabel("Months")
     plt.ylabel("Users (pcs)")
     plt.show()
+
+
+def u1b():
+    """
+    Kuinka moni hakija on kertarakentaja?
+    (kertarakentajalla on vain yksi lupahakemus, esim. rakentaa pientalon kerran elämässään)
+    Kuinka moni käyttäjä on ammattikäyttäjä?
+    (10+ lupahakemusta)
+    """
+    users = udf[udf["role"] == "applicant"]["userId"].unique()
+    one_time_users = 0
+    pro_users = 0
+    for userId in users:
+        applications = udf[
+            (udf["userId"] == userId) &
+            (udf["action"] == "submit-application")
+        ].size
+        if applications == 1:
+            one_time_users += 1
+        elif applications > 10:
+            pro_users += 1
+    print("There where "+str(pro_users)+" pro users.")
+    print("There where "+str(one_time_users)+" one time users.")
+
