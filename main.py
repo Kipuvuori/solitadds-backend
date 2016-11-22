@@ -78,6 +78,32 @@ def m1a():
     print(udf.municipalityId.nunique())
 
 
+def m1c():
+    """
+    Miten pientalolupiin kirjoitettujen viranomaiskommenttien määrä jakautuu kunnittain?
+    """
+    municipalities = udf["municipalityId"].unique()
+    counts = []
+    labels = []
+    i = 0
+    y = []
+    for municipalityId in municipalities:
+        size = udf[
+            (udf["municipalityId"] == municipalityId) &
+            (udf['action'] == 'add-comment') &
+            (udf['role'] == 'authority')
+        ].size
+        counts.append(size)
+        labels.append(str(municipalityId))
+        y.append(i)
+        i += 1
+    plt.bar(y, counts, align='center')
+    plt.xticks(y, labels)
+    plt.xlabel("MunicipalityId")
+    plt.ylabel("Comments (pcs)")
+    plt.show()
+
+
 def a1b():
     """
     Kausivaihtelu vuositasolla:
@@ -98,5 +124,3 @@ def a1b():
     plt.xlabel("Months")
     plt.ylabel("Applications (pcs)")
     plt.show()
-
-
