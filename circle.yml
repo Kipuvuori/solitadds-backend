@@ -4,5 +4,6 @@ machine:
 
 dependencies:
   pre:
-    - sudo apt-get update; sudo apt-get install python-tk tk
+    - sudo apt-get update
+    - sudo apt-get install python-tk tk python-tk-dbg
     - pip install -r requirements.txt
