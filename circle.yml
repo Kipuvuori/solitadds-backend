@@ -4,4 +4,5 @@ machine:
 
 dependencies:
   pre:
+    - sudo apt install tk-dev
     - pip install -r requirements.txt
