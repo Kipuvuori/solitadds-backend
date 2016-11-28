@@ -299,3 +299,31 @@ def mu2c():
     print(" Kertarakentajat: "+str(get_mean_processing_time_by_operation_id(one_timers_applications, "maalampo")))
 
 
+def am1a():
+    """
+    Miten pientalolupien käsittelyaika eroaa kunnittain?
+    """
+    municipalities = udf["municipalityId"].unique()
+    counts = []
+    labels = []
+    i = 0
+    y = []
+    used_odf = odf;
+    used_odf["processingTime"] = used_odf["verdictGivenDate"].dt.date - used_odf["submittedDate"].dt.date
+    for municipalityId in municipalities:
+        date = get_mean_processing_time_by_operation_id(used_odf[used_odf["municipalityId"] == municipalityId], "pientalo")
+        if type(date) is pd.tslib.Timedelta:
+            days = date.days
+        else:
+            days = 0
+        counts.append(days)
+        labels.append(str(municipalityId))
+        y.append(i)
+        i += 1
+    plt.bar(y, counts, align='center')
+    plt.xticks(y, labels)
+    plt.xlabel("MunicipalityId")
+    plt.ylabel("Mean processing time (days)")
+    plt.show()
+
+
