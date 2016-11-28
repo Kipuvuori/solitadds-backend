@@ -242,3 +242,28 @@ def a1c(_only_one_time_builders=False):
     time_plot(used_odf, "month", "Month", "Applications (pcs)", 1, 12)
     time_plot(used_odf, "weekday", "Weekday", "Applications (pcs)", 0, 6)
     time_plot(used_odf, "hour", "Hour", "Applications (pcs)", 0, 23)
+
+
+def mu1a():
+    """
+    Minkä kunnan rakennusvalvonnassa on eniten viranomaiskäyttäjiä?
+    """
+    municipalities = udf["municipalityId"].unique()
+    counts = []
+    labels = []
+    i = 0
+    y = []
+    for municipalityId in municipalities:
+        size = udf[
+            (udf["municipalityId"] == municipalityId) &
+            (udf['role'] == 'authority')
+            ]["userId"].unique().size
+        counts.append(size)
+        labels.append(str(municipalityId))
+        y.append(i)
+        i += 1
+    plt.bar(y, counts, align='center')
+    plt.xticks(y, labels)
+    plt.xlabel("MunicipalityId")
+    plt.ylabel("Authority users (pcs)")
+    plt.show()
