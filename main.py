@@ -92,7 +92,7 @@ def m1c():
             (udf["municipalityId"] == municipalityId) &
             (udf['action'] == 'add-comment') &
             (udf['role'] == 'authority')
-        ].size
+            ].size
         counts.append(size)
         labels.append(str(municipalityId))
         y.append(i)
@@ -130,9 +130,9 @@ def u1a():
             total_months = year * 12 + month
             size = udf_a[
                 udf_a["datetime"].dt.year * 12 + udf_a["datetime"].dt.month <= total_months
-            ]["userId"].unique().size
+                ]["userId"].unique().size
             counts.append(size)
-            labels.append(str(year)+"/"+str(month))
+            labels.append(str(year) + "/" + str(month))
             y.append(total_months)
             if size > max_size:
                 max_size = size
@@ -141,7 +141,7 @@ def u1a():
     plt.plot(y, counts)
     plt.xticks(y, labels)
     axes = plt.gca()
-    axes.set_ylim([min_size, max_size+5])
+    axes.set_ylim([min_size, max_size + 5])
     plt.xlabel("Months")
     plt.ylabel("Users (pcs)")
     plt.show()
@@ -161,13 +161,13 @@ def u1b():
         applications = udf[
             (udf["userId"] == userId) &
             (udf["action"] == "submit-application")
-        ].size
+            ].size
         if applications == 1:
             one_time_users += 1
         elif applications > 10:
             pro_users += 1
-    print("There where "+str(pro_users)+" pro users.")
-    print("There where "+str(one_time_users)+" one time users.")
+    print("There where " + str(pro_users) + " pro users.")
+    print("There where " + str(one_time_users) + " one time users.")
 
 
 def a1a():
@@ -201,7 +201,7 @@ def a1b():
 
 def time_plot(_odf, _name, _x_label, _y_label, _x_min=0, _x_max=0):
     if _x_min <= _x_max and (_x_min is not _x_max or _x_min is not 0):
-        times = range(_x_min, _x_max+1)
+        times = range(_x_min, _x_max + 1)
     else:
         times = _odf[_name].unique()
     counts = []
@@ -267,3 +267,35 @@ def mu1a():
     plt.xlabel("MunicipalityId")
     plt.ylabel("Authority users (pcs)")
     plt.show()
+
+
+def get_mean_processing_time_by_operation_id(_odf, operation_id):
+    return _odf[_odf["operationId"] == operation_id][
+        "processingTime"].mean()
+
+
+def mu2c():
+    """
+    Miten kertarakentajan luvan käsittelyaika eroaa
+    ammattikäyttäjän hakeman luvan käsittelyajasta? Ota
+    vertailuun esim. "pientalo"- ja
+    "maalampo"-päätoimenpiteen hakemukset, koska ne
+    ovat yhteismitallisia.
+    """
+    used_odf = odf;
+    used_odf["processingTime"] = used_odf["verdictGivenDate"].dt.date - used_odf["submittedDate"].dt.date
+    users = udf[udf["role"] == "applicant"]
+    users = users[["applicationId", "userId"]].drop_duplicates()
+    user_counts = users["userId"].value_counts()
+    professionals = user_counts[user_counts > 1].index.values
+    professional_application_ids = users[users["userId"].isin(professionals)]["applicationId"].unique()
+    professional_applications = used_odf[used_odf["applicationId"].isin(professional_application_ids)]
+    one_timers_applications = used_odf[~used_odf["applicationId"].isin(professional_application_ids)]
+    print("Pientalo keskiarvot:")
+    print(" Ammattikäyttäjä: "+str(get_mean_processing_time_by_operation_id(professional_applications, "pientalo")))
+    print(" Kertarakentajat: "+str(get_mean_processing_time_by_operation_id(one_timers_applications, "pientalo")))
+    print("Maalampo keskiarvot:")
+    print(" Ammattikäyttäjä: "+str(get_mean_processing_time_by_operation_id(professional_applications, "maalampo")))
+    print(" Kertarakentajat: "+str(get_mean_processing_time_by_operation_id(one_timers_applications, "maalampo")))
+
+
