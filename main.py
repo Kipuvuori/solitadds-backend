@@ -197,3 +197,48 @@ def a1b():
     plt.xlabel("Months")
     plt.ylabel("Applications (pcs)")
     plt.show()
+
+
+def time_plot(_odf, _name, _x_label, _y_label, _x_min=0, _x_max=0):
+    if _x_min <= _x_max and (_x_min is not _x_max or _x_min is not 0):
+        times = range(_x_min, _x_max+1)
+    else:
+        times = _odf[_name].unique()
+    counts = []
+    for time in times:
+        counts.append(_odf[_odf[_name] == time].size)
+    plt.bar(times, counts, 1, color="r")
+    x_min = min(times)
+    x_max = max(times)
+    y_min = min(counts)
+    y_max = max(counts)
+    plt.axis([x_min, x_max, y_min, y_max])
+    plt.xlabel(_x_label)
+    plt.ylabel(_y_label)
+    plt.show()
+
+
+def a1c(_only_one_time_builders=False):
+    """
+    Kausivaihtelu kuukausi-, viikko- ja päivätasolla: milloin
+    hakemuksia luodaan eniten? Kuun alussa?
+    Viikonloppuna? Klo 3 yöllä? Entä milloin kertarakentaja
+    aktivoituu?
+    """
+    used_odf = odf
+    used_odf["month"] = used_odf["createdDate"].dt.day
+    used_odf["weekday"] = used_odf["createdDate"].dt.weekday
+    used_odf["hour"] = used_odf["createdDate"].dt.hour
+    if _only_one_time_builders:
+        users = udf[udf["role"] == "applicant"]
+        users = users[["applicationId", "userId"]].drop_duplicates()
+        multi_users = users["userId"].value_counts()
+        multi_users = multi_users[multi_users > 1].index.values
+        print(multi_users)
+        multi_time_applications = users[users["userId"].isin(multi_users)]["applicationId"].unique()
+        print(multi_time_applications)
+        used_odf = used_odf[~used_odf["applicationId"].isin(multi_time_applications)]
+    print(used_odf)
+    time_plot(used_odf, "month", "Month", "Applications (pcs)", 1, 12)
+    time_plot(used_odf, "weekday", "Weekday", "Applications (pcs)", 0, 6)
+    time_plot(used_odf, "hour", "Hour", "Applications (pcs)", 0, 23)
